@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+.hero{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(45deg, #010758 , #490d61 );
+    flex-direction: column;
+}
+.hero h1{
+    color: aliceblue;
+    font-size: 45px;
+    font-weight: 500;
+margin-top: -50px;
+margin-bottom: 50px;
+}
+.hero h1 span{
+    color: #ff2963;
+}
+textarea{
+    font-size: 19px;
+width: 630px;
+height: 250px;
+color: aliceblue;
+border: none;
+outline: none;
+padding: 20px;
+border-radius: 10px;
+resize: none;
+background: #403d84;
+margin-bottom: 30px;
+}
+textarea::placeholder{
+    color: aliceblue;
+}
+.row{
+display: flex;
+width: 600px;
+justify-content: center;
+align-items: center;
+gap: 16px;
+}
+button{
+    background: #ff2963;
+    padding: 20px 30px;
+    border-radius: 35px;
+    color: aliceblue;
+    font-size: 17px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+button img{
+    width: 17px;
+    height: 17px;
+    margin-right: 10px;
+}
+select{
+    background: #403d84;
+    color: aliceblue;
+    flex: 1;
+    height: 60px;
+    padding: 0 20px;
+    border: none;
+    outline: none;
+    border-radius: 35px;
+    appearance: none;
+    background-image: url(dropdown.png);
+    background-repeat: no-repeat;
+    background-size: 15px;
+    background-position-x: calc(100% - 20px) ;
+      background-position-y: 20px;
+}
+</style>
+<body>
+<div class="hero">
+    <h1>TEXT TO SPEECH <span>CONVERTER</span></h1>
+    <textarea placeholder="write anything here..."></textarea>
+<div class="row">
+    <select></select>
+    <button><img src="play.png"> Listen.</button>
+</div>
+
+</div>
+
+
+
+    <script>
+let speech = new SpeechSynthesisUtterance(); 
+
+let voices = [];
+
+let selectVoice= document.querySelector("select")
+
+window.speechSynthesis.onvoiceschanged =() =>{
+    voices = window.speechSynthesis.getVoices();
+    speech.voice= voices[0];
+    voices.forEach((voice, i) =>(selectVoice.options[i]= new Option(voice.name, i)))
+}
+
+selectVoice.addEventListener("change",()=>{
+    speech.voice=voices[selectVoice.value];
+})
+
+
+document.querySelector("button").addEventListener("click" ,() =>{
+    speech.text = document.querySelector("textarea").value;
+    window.speechSynthesis.speak(speech);
+})
+    </script>
+    
+</body>
+</html>
