@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #010758, #490d61);
+            flex-direction: column;
+            padding: 20px;
+        }
+        .hero h1 {
+            color: aliceblue;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 500;
+            margin-top: -3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        .hero h1 span {
+            color: #ff2963;
+        }
+        textarea {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            width: min(90%, 630px);
+            height: 250px;
+            color: aliceblue;
+            border: none;
+            outline: none;
+            padding: 20px;
+            border-radius: 10px;
+            resize: none;
+            background: #403d84;
+            margin-bottom: 2rem;
+        }
+        textarea::placeholder {
+            color: aliceblue;
+        }
+        .row {
+            display: flex;
+            width: min(90%, 600px);
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        button {
+            background: #ff2963;
+            padding: 1rem 1.5rem;
+            border-radius: 35px;
+            color: aliceblue;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        button img {
+            width: 17px;
+            height: 17px;
+            margin-right: 10px;
+        }
+        select {
+            background: #403d84;
+            color: aliceblue;
+            flex: 1;
+            height: 60px;
+            padding: 0 20px;
+            border: none;
+            outline: none;
+            border-radius: 35px;
+            appearance: none;
+            background-image: url(dropdown.png);
+            background-repeat: no-repeat;
+            background-size: 15px;
+            background-position-x: calc(100% - 20px);
+            background-position-y: 20px;
+            min-width: 120px;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: clamp(1.5rem, 5vw, 2rem);
+                margin-top: -2rem;
+                margin-bottom: 2rem;
+            }
+            textarea {
+                height: 240px;
+                padding: 23px;
+            }
+            .row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            button, select {
+                padding: 20px 30px;
+                width: 100%;
+                max-width: 150px;
+                height: 50px;
+                font-size: clamp(0.8rem, 2vw, 1rem);
+            }
+            select {
+                background-position-y: 15px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero {
+                padding: 10px;
+            }
+            textarea {
+                height: 150px;
+                font-size: clamp(0.9rem, 2.5vw, 1rem);
+            }
+            button img {
+                width: 15px;
+                height: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>TEXT TO SPEECH <span>CONVERTER</span></h1>
+        <textarea placeholder="write anything here..."></textarea>
+        <div class="row">
+            <select></select>
+            <button><img src="play.png"> Listen.</button>
+        </div>
+    </div>
+
+    <script>
+        let speech = new SpeechSynthesisUtterance(); 
+
+        let voices = [];
+
+        let selectVoice = document.querySelector("select");
+
+        window.speechSynthesis.onvoiceschanged = () => {
+            voices = window.speechSynthesis.getVoices();
+            speech.voice = voices[0];
+            voices.forEach((voice, i) => (selectVoice.options[i] = new Option(voice.name, i)));
+        };
+
+        selectVoice.addEventListener("change", () => {
+            speech.voice = voices[selectVoice.value];
+        });
+
+        document.querySelector("button").addEventListener("click", () => {
+            speech.text = document.querySelector("textarea").value;
+            window.speechSynthesis.speak(speech);
+        });
+    </script>
+</body>
+</html>
